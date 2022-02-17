@@ -43,7 +43,7 @@ class PostController extends Controller
         ]);
 
         return Post::create([
-            'user_id' => 1,
+            'user_id' => auth()->id(),
             'title' => $request->title,
             'body' => $request->body,
         ]);
