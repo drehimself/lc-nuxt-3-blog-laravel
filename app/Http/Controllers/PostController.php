@@ -68,7 +68,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $this->authorize('update', $post);
+
+        return $post->load('user:id,name');
     }
 
     /**
@@ -78,9 +80,19 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(Request $request, Post $post)
     {
-        //
+        $this->authorize('update', $post);
+
+        $request->validate([
+            'title' => 'required|min:3',
+            'body' => 'required|min:3',
+        ]);
+
+        return $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+        ]);
     }
 
     /**
@@ -91,6 +103,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $this->authorize('delete', $post);
+
+        return $post->delete();
     }
 }
